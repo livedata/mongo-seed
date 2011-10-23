@@ -1,0 +1,59 @@
+<form method="post">
+
+<div>
+<label for="firstNames">first names</label>
+<textarea type="text" name="firstNames" id="firstNames" cols="80" rows="6">${params.firstNames}</textarea>
+</div>
+
+<div>
+<label for="lastNames">last names</label>
+<textarea name="lastNames" id="lastNames" cols="80" rows="6">${params.lastNames}</textarea>
+</div>
+
+
+<div>
+<label for="cities">cities</label>
+<textarea name="cities" id="cities" cols="80" rows="6">${params.cities}</textarea>
+</div>
+
+<div>
+<label for="ages">ages</label>
+<textarea name="ages" id="ages" cols="80" rows="1">${params.ages}</textarea>
+</div>
+
+<div>
+<label for="genders">genders</label>
+<textarea  name="genders" id="genders" cols="80" rows="1">${params.genders}</textarea>
+</div>
+
+<div>
+<label for="emailDomains">email domains</label>
+<textarea  name="emailDomains" id="emailDomains" cols="80" rows="2">${params.emailDomains}</textarea>
+</div>
+
+<div>
+<label for="mobilePhones">mobile phones</label>
+<textarea  name="mobilePhones" id="mobilePhones" cols="80" rows="2">${params.mobilePhones}</textarea>
+</div>
+
+<div>
+<label for="workPhones">work phones</label>
+<textarea  name="workPhones" id="workPhones" cols="80" rows="2">${params.workPhones}</textarea>
+</div>
+
+<div>
+<label for="homePhones">home phones</label>
+<textarea  name="homePhones" id="homePhones" cols="80" rows="2">${params.homePhones}</textarea>
+</div>
+
+<div>
+<label for="count">count</label>
+<input type="text" name="count" id="count" value="${count}"></input>
+</div>
+
+<input type="submit" value="generate!"/>
+
+</form>
+<div style="border:solid 1px #ddd">
+${parsed}
+</div>
