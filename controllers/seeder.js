@@ -34,13 +34,17 @@ exports.boot = function(app){
 			workPhones: parseRanges(params.workPhones),
 			homePhones: parseRanges(params.homePhones),
 		},
-		count = req.body.count;
+		count = req.body.count,
+		data = _(count).range().map( function(i) { return seedCustomer(parsed); } )
+		;
 
 		res.render('seeder/index',{
 			title: 'generate customer data',
 			params: params,
 			parsed: JSON.stringify(parsed),
-			count: count
+			count: count,
+			data: data,
+			result: JSON.stringify(data)
 		});
 	});
 }
@@ -69,4 +73,29 @@ var trimRx = /^\s*([\S\s]*?)\s*$/;
 
 function trim(str){
 	return str.replace(trimRx, '$1');
+}
+
+function getRandomInt (min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function seedProperty(list)
+{
+	var rnd = getRandomInt(0, list.length - 1);
+	var item = list[rnd];
+	if(_(item).isArray())
+		return getRandomInt(item[0], item[1]);
+	return item;
+}
+
+
+function seedCustomer(parsed)
+{
+	return {
+		firstName: seedProperty(parsed.firstNames),
+		lastName: seedProperty(parsed.lastNames),
+		city: seedProperty(parsed.cities),
+		age: seedProperty(parsed.ages)
+				
+	};
 }
