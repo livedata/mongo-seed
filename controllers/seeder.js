@@ -6,14 +6,18 @@ _ = require('../../../node_modules/underscore')._;
 exports.boot = function(app){
 
 	app.get('/', function(req, res){
-		res.render('seeder/index',{title: 'generate customer data'});
+		res.render('seeder/index',{title: 'generate customer data', params:{}, count: 100 });
 	});
 
 
 	app.post('/', function(req, res){
 		var params = 
 		{
+			countries: req.body.countries,
 			cities: req.body.cities,
+			streets: req.body.streets,
+			streetNumbers: req.body.streetNumbers,
+			zipCodes: req.body.zipCodes,
 			ages: req.body.ages,
 			firstNames: req.body.firstNames,
 			lastNames: req.body.lastNames,
@@ -24,7 +28,11 @@ exports.boot = function(app){
 			homePhones: req.body.homePhones,
 		},
 		parsed = {
+			countries: parseList(params.countries),
 			cities: parseList(params.cities),
+			streets: parseList(params.streets),
+			streetNumbers: parseRanges(params.streetNumbers),
+			zipCodes: parseRanges(params.zipCodes),
 			firstNames: parseList(params.firstNames),
 			lastNames: parseList(params.lastNames),
 			genders: parseList(params.genders),
@@ -66,7 +74,7 @@ function parseRange(param)
 	var r = param.split('-');
 	if(r.length!=2)
 		return param;
-	return [r[0], r[1]];
+	return [parseInt(r[0]), parseInt(r[1])];
 }
 
 var trimRx = /^\s*([\S\s]*?)\s*$/;
@@ -91,11 +99,27 @@ function seedProperty(list)
 
 function seedCustomer(parsed)
 {
+	var firstName = seedProperty(parsed.firstNames),
+	lastName = seedProperty(parsed.lastNames),
+	birthDate = new Date(),
+	age = seedProperty(parsed.ages);
+	birthDate.setDate(birthDate.getDate() - (age * 365 + getRandomInt(0, 364)));
 	return {
-		firstName: seedProperty(parsed.firstNames),
-		lastName: seedProperty(parsed.lastNames),
-		city: seedProperty(parsed.cities),
-		age: seedProperty(parsed.ages)
+		firstName: firstName,
+		lastName: lastName,
+		gender: seedProperty(parsed.genders),
+		birthDate: new Date(birthDate.getYear(), birthDate.getMonth(), birthDate.getDay()),
+		address: {
+			country: seedProperty(parsed.countries),
+			city: seedProperty(parsed.cities),
+			street: seedProperty(parsed.streets),
+			streetNumber: seedProperty(parsed.streetNumbers),
+			zipCode: seedProperty(parsed.zipCodes)
+		},
+		email: (firstName+'').toLowerCase() + '.' + (lastName+'').toLowerCase() + '@' + seedProperty(parsed.emailDomains),
+		mobilePhone: seedProperty(parsed.mobilePhones),
+		workPhone: seedProperty(parsed.workPhones),
+		homePhone: seedProperty(parsed.homePhones),
 				
 	};
 }
